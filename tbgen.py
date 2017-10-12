@@ -9,6 +9,8 @@
 Created on 2010-4-23
 
 @author: Alex Guo
+
+@updated: Joe Steinmeyer 10-11-2017
 '''
 
 import re
@@ -46,8 +48,8 @@ class TestbenchGenerator(object):
         try:
             self.vfile = open(self.vfile_name, 'r')
             self.vcont = self.vfile.read() 
-        except Exception, e:
-            print "ERROR:Open and read file error.\n ERROR:    %s" % e
+        except Exception as e:
+            print("ERROR:Open and read file error.\n ERROR:    %s" % e)
             sys.exit(1)
             
     def open_outputfile(self, ofile_name = None):
@@ -56,15 +58,15 @@ class TestbenchGenerator(object):
                 if(self.ofile_name == None):
                     ofname = "tb_%s.v" % self.mod_name
                     self.ofile = open(ofname, 'w')
-                    print "Your are not specify a output file name, use '%s' instead." % ofname 
+                    print("Your are not specify a output file name, use '%s' instead." % ofname)
                 else:
                     self.ofile = open(self.ofile_name, 'w')
-                    print "Output file is '%s'." % self.ofile_name
+                    print("Output file is '%s'." % self.ofile_name)
             else:
                 self.ofile = open(ofile_name, 'w')
-                print "Output file is '%s'." % ofile_name
-        except Exception, e:
-            print "ERROR:open and write output file error. \n ERROR:    %s" % e
+                print("Output file is '%s'." % ofile_name)
+        except Exception as e:
+            print("ERROR:open and write output file error. \n ERROR:    %s" % e)
             sys.exit(1)
                 
     def clean_other(self, cont):
@@ -81,12 +83,13 @@ class TestbenchGenerator(object):
         return cont
         
     def parser(self):
-        print "Parsering..."
+        print("Parsering...")
         # print vf_cont 
         mod_pattern = r"module[\s]+(\S*)[\s]*\([^\)]*\)[\s\S]*"  
-        
+        print(mod_pattern) 
         module_result = re.findall(mod_pattern, self.clean_other(self.vcont))
         #print module_result
+        print(module_result)
         self.mod_name = module_result[0]
         
         self.parser_inoutput()
@@ -153,13 +156,13 @@ class TestbenchGenerator(object):
         for pin in self.pin_list:
             if re.match(r'[\S]*(clk|clock)[\S]*', pin[1]):
                 self.clock_name = pin[1]
-                print "I think your clock signal is '%s'." % pin[1]
+                print("I think your clock signal is '%s'." % pin[1])
                 break
 
         for pin in self.pin_list:
             if re.match(r'rst|reset', pin[1]):
                 self.reset_name = pin[1]
-                print "I think your reset signal is '%s'." % pin[1]
+                print("I think your reset signal is '%s'." % pin[1])
                 break
 
     def print_module_head(self):
@@ -174,7 +177,7 @@ class TestbenchGenerator(object):
     def close(self):
         if self.vfile != None:
             self.vfile.close()
-        print "Output finished.\n\n"
+        print("Output finished.\n\n")
 
     def align_print(self, content, indent):
         """ Align pretty print."""
@@ -195,14 +198,15 @@ class TestbenchGenerator(object):
         
 
 if __name__ == "__main__":
-    print '''***************** tbgen - Auto generate a testbench. *****************
+    print('''***************** tbgen - Auto generate a testbench. *****************
 Author: Xiongfei(Alex) Guo <xfguo@credosemi.com>
 License: Beerware
-'''
+Update: Joe Steinmeyer (jodalyst@mit.edu)
+''')
     ofile_name = None
     if len(sys.argv) == 1:
         sys.stderr.write("ERROR: You aren't specfic a input file name.\n")
-        print "Usage: tbgen input_verilog_file_name [output_testbench_file_name]"
+        print("Usage: tbgen input_verilog_file_name [output_testbench_file_name]")
         sys.exit(1)
     elif len(sys.argv) == 3:
         ofile_name = sys.argv[2]
