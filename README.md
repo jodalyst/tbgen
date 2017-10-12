@@ -15,3 +15,8 @@ Make sure you have python on your system.
 Author: Xiongfei(Alex) Guo <xfguo@credosemi.com>
 
 License: Beerware
+
+
+----
+
+Update 10/2017 by jodalyst...mainly python3 compatabilizing it right now.
