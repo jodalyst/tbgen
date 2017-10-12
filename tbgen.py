@@ -86,7 +86,8 @@ class TestbenchGenerator(object):
         print("Parsering...")
         # print vf_cont 
         mod_pattern = r"module[\s]+(\S*)[\s]*\([^\)]*\)[\s\S]*"  
-        print(mod_pattern) 
+        print(mod_pattern)
+        print(self.clean_other(self.vcont))
         module_result = re.findall(mod_pattern, self.clean_other(self.vcont))
         #print module_result
         print(module_result)
@@ -136,14 +137,14 @@ class TestbenchGenerator(object):
         
         self.printo( "%s uut (\n" % self.mod_name )
         
-        align_cont = self.align_print(map(lambda x:("", "." + x[1], "(", x[1], '),'), self.pin_list), 4)
+        align_cont = self.align_print(list(map(lambda x:("", "." + x[1], "(", x[1], '),'), self.pin_list)), 4)
         align_cont = align_cont[:-2] + "\n"
         self.printo( align_cont )
         
         self.printo( ");\n" )
         
     def print_wires(self):
-        self.printo(self.align_print(map(lambda x:(x[3], x[2], x[1], ';'), self.pin_list), 4))
+        self.printo(self.align_print(list(map(lambda x:(x[3], x[2], x[1], ';'), self.pin_list)), 4))
         self.printo("\n")
     
     def print_clock_gen(self):
@@ -186,14 +187,14 @@ class TestbenchGenerator(object):
         col_len = len(content[0])
         align_cont = [""] * row_len
         for i in range(col_len):
-            col = map(lambda x:x[i], content)
-            max_len = max(map(len, col))
+            col = list(map(lambda x:x[i], content))
+            max_len = max(list(map(len, col)))
             for i in range(row_len):
                 l = len(col[i])
                 align_cont[i] += "%s%s" % (col[i], (indent + max_len - l) * ' ')
         
         # remove space in line end
-        align_cont = map(lambda s:re.sub('[ ]*$', '', s), align_cont)
+        align_cont = list(map(lambda s:re.sub('[ ]*$', '', s), align_cont))
         return "\n".join(align_cont) + "\n"
         
 
